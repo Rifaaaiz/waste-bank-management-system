@@ -25,7 +25,7 @@ Ensure that you have the following installed on your system:
 ### 📌 Steps
 1. **Clone the Repository**
    ```sh
-   git clone https://github.com/Putusutha/mvc_php-simple_waste_bank.git
+   git clone https://github.com/Temlearnt/mvc_php-simple_waste_bank.git
    ```
 2. **Move the Project to the Server Directory**
    Copy the project folder to `C:/xampp/htdocs/`.
