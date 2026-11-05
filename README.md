@@ -1,6 +1,6 @@
 # ♻️ Waste Bank Management System
 
-<h3 align="center">🌱 KPP Bina Lindung — Zero Waste</h3>
+<h3 align="center">🌱 KPP Bina Lindung - Zero Waste</h3>
 
 <p align="center">
   Sistem Informasi Pengelolaan Bank Sampah Berbasis Web
