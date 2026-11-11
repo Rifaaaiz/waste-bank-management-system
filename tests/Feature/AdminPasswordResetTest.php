@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\AdminPasswordResetNotification;
+use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -65,9 +66,81 @@ class AdminPasswordResetTest extends TestCase
             ->assertOk()
             ->assertSee('Reset Password')
             ->assertSee(asset('images/LogoE-Sabililah.png'))
-            ->assertSee(route('admin.password.email'))
+            ->assertSee(route('admin.password.change'))
             ->assertSee('name="username"', false)
+            ->assertSee('name="current_password"', false)
+            ->assertSee('name="password"', false)
+            ->assertSee('name="password_confirmation"', false)
+            ->assertSee('value="adminsampah"', false)
+            ->assertSee('Masukan Password Lama')
+            ->assertSee('Tampilkan password lama')
+            ->assertSee('Tampilkan password baru');
+
+        $this->get(route('admin.password.request', ['method' => 'email']))
+            ->assertOk()
+            ->assertSee('Kirim Tautan Reset')
+            ->assertSee(route('admin.password.email'))
             ->assertSee('name="email"', false);
+    }
+
+    public function test_admin_can_change_password_only_after_verifying_current_password(): void
+    {
+        $admin = $this->createUser('adminsampah', 'Admin');
+        $admin->forceFill(['password_hash' => Hash::make('12345678')])->save();
+
+        $this->post(route('admin.password.change'), [
+            'username' => 'adminsampah',
+            'current_password' => 'wrong-password',
+            'password' => 'A-new-admin-password',
+            'password_confirmation' => 'A-new-admin-password',
+        ])->assertRedirect()
+            ->assertSessionHasErrors('current_password');
+
+        $this->assertTrue(Hash::check('12345678', $admin->fresh()->password_hash));
+
+        $this->post(route('admin.password.change'), [
+            'username' => 'adminsampah',
+            'current_password' => '12345678',
+            'password' => 'A-new-admin-password',
+            'password_confirmation' => 'A-different-password',
+        ])->assertRedirect()
+            ->assertSessionHasErrors('password');
+
+        $this->assertTrue(Hash::check('12345678', $admin->fresh()->password_hash));
+
+        $this->post(route('admin.password.change'), [
+            'username' => 'adminsampah',
+            'current_password' => '12345678',
+            'password' => 'A-new-admin-password',
+            'password_confirmation' => 'A-new-admin-password',
+        ])
+            ->assertRedirect(route('admin.login'))
+            ->assertSessionHas('status');
+
+        $admin->refresh();
+        $this->assertSame('adminsampah', $admin->username);
+        $this->assertTrue(Hash::check('A-new-admin-password', $admin->password_hash));
+        $this->assertNotSame('A-new-admin-password', $admin->password_hash);
+
+        $this->post(route('admin.login.process'), [
+            'username' => 'adminsampah',
+            'password' => 'A-new-admin-password',
+        ])->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_member_cannot_change_password_through_admin_reset_form(): void
+    {
+        $member = $this->createUser('member', 'Warga');
+
+        $this->post(route('admin.password.change'), [
+            'username' => $member->username,
+            'current_password' => 'Old-password-123',
+            'password' => 'A-new-admin-password',
+            'password_confirmation' => 'A-new-admin-password',
+        ])->assertRedirect()
+            ->assertSessionHasErrors('current_password');
+
+        $this->assertTrue(Hash::check('Old-password-123', $member->fresh()->password_hash));
     }
 
     public function test_reset_link_is_sent_only_for_an_admin_and_uses_admin_reset_route(): void
@@ -94,7 +167,7 @@ class AdminPasswordResetTest extends TestCase
 
         Notification::assertNotSentTo($member, AdminPasswordResetNotification::class);
 
-        $token = Password::broker()->createToken($admin);
+        $token = $this->createResetToken($admin);
         $notification = new AdminPasswordResetNotification($token);
         $resetUrl = $notification->toMail($admin)->actionUrl;
 
@@ -107,21 +180,25 @@ class AdminPasswordResetTest extends TestCase
     public function test_valid_admin_token_resets_hashed_password_and_can_be_used_to_login(): void
     {
         $admin = $this->createUser('administrator', 'Admin');
-        $token = Password::broker()->createToken($admin);
+        $token = $this->createResetToken($admin);
 
         $this->get(route('admin.password.reset', [
             'token' => $token,
             'email' => $admin->email,
         ]))
             ->assertOk()
+            ->assertSee('Reset Password')
+            ->assertSee('name="current_password"', false)
             ->assertSee('name="password"', false)
             ->assertSee('name="password_confirmation"', false)
-            ->assertSee('name="token"', false);
+            ->assertSee('name="token"', false)
+            ->assertSee('name="email"', false);
 
         $this->post(route('admin.password.update'), [
             'username' => $admin->username,
             'email' => $admin->email,
             'token' => $token,
+            'current_password' => 'Old-password-123',
             'password' => 'A-new-admin-password',
             'password_confirmation' => 'A-new-admin-password',
         ])
@@ -141,7 +218,7 @@ class AdminPasswordResetTest extends TestCase
     {
         $member = $this->createUser('member', 'Warga');
         $oldPasswordHash = $member->password_hash;
-        $token = Password::broker()->createToken($member);
+        $token = $this->createResetToken($member);
 
         $this->get(route('admin.password.reset', [
             'token' => $token,
@@ -154,9 +231,10 @@ class AdminPasswordResetTest extends TestCase
             'username' => $member->username,
             'email' => $member->email,
             'token' => $token,
+            'current_password' => 'Old-password-123',
             'password' => 'A-new-admin-password',
             'password_confirmation' => 'A-new-admin-password',
-        ])->assertSessionHasErrors('email');
+        ])->assertSessionHasErrors('current_password');
 
         $this->assertSame($oldPasswordHash, $member->fresh()->password_hash);
     }
@@ -169,5 +247,14 @@ class AdminPasswordResetTest extends TestCase
             'password_hash' => Hash::make('Old-password-123'),
             'role_id' => Role::where('role_name', $roleName)->value('role_id'),
         ]);
+    }
+
+    private function createResetToken(User $user): string
+    {
+        $broker = Password::broker();
+        $this->assertInstanceOf(PasswordBroker::class, $broker);
+
+        /** @var PasswordBroker $broker */
+        return $broker->createToken($user);
     }
 }

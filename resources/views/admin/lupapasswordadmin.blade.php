@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#2F8961">
-    <title>Lupa Password Admin - E-Sabilillah</title>
+    <title>Reset Password Admin - E-Sabilillah</title>
     <style>
         :root {
             color-scheme: light;
@@ -55,14 +55,14 @@
         }
 
         .reset-panel {
-            padding: 48px clamp(36px, 5.2vw, 84px);
+            padding: 36px clamp(36px, 5.2vw, 56px);
             background: #2F8961;
             color: #fff;
         }
 
         .reset-content {
             width: 100%;
-            max-width: 570px;
+            max-width: 520px;
             margin: auto;
         }
 
@@ -73,15 +73,15 @@
         h1 {
             margin: 0;
             text-align: center;
-            font-size: 36px;
+            font-size: clamp(26px, 2.5vw, 30px);
             font-weight: 750;
             line-height: 1.2;
         }
 
         .subtitle {
-            margin: 14px 0 34px;
+            margin: 14px 0 20px;
             text-align: center;
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 400;
             line-height: 1.5;
         }
@@ -107,27 +107,27 @@
         }
 
         .field {
-            margin-bottom: 20px;
+            margin-bottom: 9px;
         }
 
         .field label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
+            margin-bottom: 4px;
+            font-size: 12px;
             font-weight: 700;
         }
 
         .field input {
             display: block;
             width: 100%;
-            min-height: 44px;
-            padding: 10px 13px;
+            min-height: 30px;
+            padding: 6px 9px;
             border: 1px solid transparent;
-            border-radius: 9px;
+            border-radius: 7px;
             outline: none;
             background: #fff;
             color: #3e4742;
-            font-size: 15px;
+            font-size: 10px;
         }
 
         .field input::placeholder {
@@ -147,6 +147,46 @@
             background: #edf2ee;
         }
 
+        .password-input-wrap {
+            position: relative;
+        }
+
+        .password-input-wrap input {
+            padding-right: 40px;
+        }
+
+        .password-visibility {
+            position: absolute;
+            top: 50%;
+            right: 7px;
+            display: grid;
+            width: 28px;
+            height: 28px;
+            place-items: center;
+            padding: 0;
+            border: 0;
+            border-radius: 5px;
+            background: transparent;
+            color: #53665b;
+            cursor: pointer;
+            transform: translateY(-50%);
+        }
+
+        .password-visibility:hover,
+        .password-visibility:focus-visible {
+            background: #edf6f1;
+        }
+
+        .password-visibility svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.7;
+        }
+
         .field-error {
             display: block;
             margin-top: 6px;
@@ -157,14 +197,14 @@
         .submit-button {
             display: flex;
             width: 100%;
-            min-height: 46px;
+            min-height: 34px;
             align-items: center;
             justify-content: center;
             border: 0;
-            border-radius: 5px;
+            border-radius: 4px;
             background: #A1CB35;
             color: #fff;
-            font-size: 19px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: background-color 140ms ease, transform 140ms ease;
@@ -186,9 +226,9 @@
 
         .back-link {
             display: block;
-            margin-top: 20px;
+            margin-top: 14px;
             color: #e4f0d0;
-            font-size: 14px;
+            font-size: 12px;
             text-align: center;
             text-decoration: none;
         }
@@ -201,20 +241,29 @@
 
         .logo-panel {
             padding: 48px;
+            overflow: hidden;
             background: #fff;
+        }
+
+        .logo-mark {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
         }
 
         .logo-panel img {
             display: block;
-            width: min(75%, 520px);
-            max-height: 70vh;
+            width: min(145%, 760px);
+            flex-shrink: 0;
+            max-height: 82vh;
             object-fit: contain;
         }
 
         @media (max-width: 900px) and (min-width: 701px) {
             .reset-panel {
-                padding-right: 38px;
-                padding-left: 38px;
+                padding-right: 34px;
+                padding-left: 34px;
             }
 
             .logo-panel {
@@ -242,18 +291,18 @@
 
             .mobile-brand img {
                 display: block;
-                width: min(42vw, 170px);
+                width: min(75vw, 280px);
                 max-height: 110px;
                 object-fit: contain;
             }
 
             h1 {
-                font-size: 32px;
+                font-size: 28px;
             }
 
             .subtitle {
-                margin: 10px 0 28px;
-                font-size: 16px;
+                margin: 10px 0 22px;
+                font-size: 13px;
             }
 
             .logo-panel {
@@ -276,11 +325,7 @@
             }
 
             .subtitle {
-                margin-bottom: 20px;
-            }
-
-            .field {
-                margin-bottom: 15px;
+                margin-bottom: 16px;
             }
         }
     </style>
@@ -293,8 +338,16 @@
                     <img src="{{ asset('images/LogoE-Sabililah.png') }}" alt="Logo KPP Bina Lindung Zero Waste">
                 </div>
 
-                <h1 id="reset-title">Lupa Password</h1>
-                <p class="subtitle">Pastikan anda ingat password baru anda !</p>
+                <h1 id="reset-title">Reset Password</h1>
+                <p class="subtitle">
+                    @if (isset($token))
+                        Pastikan anda ingat password baru anda!
+                    @elseif ($emailReset ?? false)
+                        Masukkan username dan email terdaftar untuk menerima tautan reset.
+                    @else
+                        Pastikan anda ingat password baru anda!
+                    @endif
+                </p>
 
                 @if (session('status'))
                     <p class="notice" role="status">{{ session('status') }}</p>
@@ -336,18 +389,45 @@
                         </div>
 
                         <div class="field">
+                            <label for="current_password">Password Lama</label>
+                            <div class="password-input-wrap">
+                                <input
+                                    id="current_password"
+                                    name="current_password"
+                                    type="password"
+                                    placeholder="Masukan Password Lama"
+                                    autocomplete="current-password"
+                                    maxlength="255"
+                                    required
+                                    aria-invalid="{{ $errors->has('current_password') ? 'true' : 'false' }}"
+                                >
+                                <button class="password-visibility" type="button" aria-label="Tampilkan password lama" aria-pressed="false">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            @error('current_password')
+                                <span class="field-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="field">
                             <label for="password">Password Baru</label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="Masukan Password"
-                                autocomplete="new-password"
-                                minlength="8"
-                                maxlength="255"
-                                required
-                                aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
-                            >
+                            <div class="password-input-wrap">
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Masukan Password Baru"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    maxlength="255"
+                                    required
+                                    aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
+                                >
+                                <button class="password-visibility" type="button" aria-label="Tampilkan password baru" aria-pressed="false">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
                             @error('password')
                                 <span class="field-error">{{ $message }}</span>
                             @enderror
@@ -355,23 +435,28 @@
 
                         <div class="field">
                             <label for="password_confirmation">Konfirmasi Password Baru</label>
-                            <input
-                                id="password_confirmation"
-                                name="password_confirmation"
-                                type="password"
-                                placeholder="Masukan Konfirmasi Password Baru"
-                                autocomplete="new-password"
-                                minlength="8"
-                                maxlength="255"
-                                required
-                            >
+                            <div class="password-input-wrap">
+                                <input
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    placeholder="Masukan Konfirmasi Password Baru"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    maxlength="255"
+                                    required
+                                >
+                                <button class="password-visibility" type="button" aria-label="Tampilkan konfirmasi password" aria-pressed="false">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
                         </div>
 
                         <button class="submit-button" type="submit">
-                            <span class="button-label">Sign In</span>
+                            <span class="button-label">Reset Password</span>
                         </button>
                     </form>
-                @else
+                @elseif ($emailReset ?? false)
                     <form id="admin-reset-form" method="POST" action="{{ route('admin.password.email') }}">
                         @csrf
 
@@ -413,17 +498,117 @@
                         </div>
 
                         <button class="submit-button" type="submit">
-                            <span class="button-label">Sign In</span>
+                            <span class="button-label">Kirim Tautan Reset</span>
+                        </button>
+                    </form>
+                @else
+                    <form id="admin-reset-form" method="POST" action="{{ route('admin.password.change') }}">
+                        @csrf
+
+                        <div class="field">
+                            <label for="username">Username</label>
+                            <input
+                                id="username"
+                                name="username"
+                                type="text"
+                                value="{{ old('username', 'adminsampah') }}"
+                                placeholder="Masukan Username"
+                                autocomplete="username"
+                                autocapitalize="none"
+                                maxlength="50"
+                                required
+                                aria-invalid="{{ $errors->has('username') ? 'true' : 'false' }}"
+                            >
+                            @error('username')
+                                <span class="field-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="field">
+                            <label for="current_password">Password Lama</label>
+                            <div class="password-input-wrap">
+                                <input
+                                    id="current_password"
+                                    name="current_password"
+                                    type="password"
+                                    placeholder="Masukan Password Lama"
+                                    autocomplete="current-password"
+                                    maxlength="255"
+                                    required
+                                    aria-invalid="{{ $errors->has('current_password') ? 'true' : 'false' }}"
+                                >
+                                <button class="password-visibility" type="button" aria-label="Tampilkan password lama" aria-pressed="false">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            @error('current_password')
+                                <span class="field-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="field">
+                            <label for="password">Password Baru</label>
+                            <div class="password-input-wrap">
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Masukan Password Baru"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    maxlength="255"
+                                    required
+                                    aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
+                                >
+                                <button class="password-visibility" type="button" aria-label="Tampilkan password baru" aria-pressed="false">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            @error('password')
+                                <span class="field-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="field">
+                            <label for="password_confirmation">Konfirmasi Password Baru</label>
+                            <div class="password-input-wrap">
+                                <input
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    placeholder="Masukan Konfirmasi Password Baru"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    maxlength="255"
+                                    required
+                                >
+                                <button class="password-visibility" type="button" aria-label="Tampilkan konfirmasi password" aria-pressed="false">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="submit-button" type="submit">
+                            <span class="button-label">Reset Password</span>
                         </button>
                     </form>
                 @endif
 
+                @if (! isset($token))
+                    @if ($emailReset ?? false)
+                        <a class="back-link" href="{{ route('admin.password.request') }}">Reset dengan password lama</a>
+                    @else
+                        <a class="back-link" href="{{ route('admin.password.request', ['method' => 'email']) }}">Lupa password lama? Kirim tautan reset via email</a>
+                    @endif
+                @endif
                 <a class="back-link" href="{{ route('admin.login') }}">Kembali ke Login Admin</a>
             </div>
         </section>
 
         <aside class="logo-panel" aria-label="Logo organisasi">
-            <img src="{{ asset('images/LogoE-Sabililah.png') }}" alt="Logo KPP Bina Lindung Zero Waste">
+            <div class="logo-mark">
+                <img src="{{ asset('images/LogoE-Sabililah.png') }}" alt="Logo KPP Bina Lindung Zero Waste">
+            </div>
         </aside>
     </main>
     <script>
@@ -434,6 +619,20 @@
                 button.disabled = true;
                 button.querySelector('.button-label').textContent = 'Memproses...';
             }
+        });
+
+        document.querySelectorAll('.password-visibility').forEach((button) => {
+            button.addEventListener('click', () => {
+                const input = button.parentElement.querySelector('input');
+                const isVisible = input.type === 'text';
+
+                input.type = isVisible ? 'password' : 'text';
+                button.setAttribute('aria-pressed', String(!isVisible));
+                button.setAttribute(
+                    'aria-label',
+                    `${isVisible ? 'Tampilkan' : 'Sembunyikan'} ${button.getAttribute('aria-label').replace(/^(Tampilkan|Sembunyikan) /, '')}`
+                );
+            });
         });
     </script>
 </body>

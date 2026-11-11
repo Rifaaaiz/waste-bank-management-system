@@ -54,9 +54,9 @@
             z-index: 20;
             inset: 0 auto 0 0;
             display: flex;
-            width: 275px;
+            width: 220px;
             flex-direction: column;
-            padding: 28px 17px 20px;
+            padding: 18px 12px 16px;
             overflow-y: auto;
             background: #2F8961;
             color: #fff;
@@ -65,45 +65,61 @@
 
         .sidebar-brand {
             display: flex;
-            min-height: 190px;
+            min-height: 112px;
             align-items: center;
             justify-content: center;
-            padding: 0 5px 24px;
+            padding: 0 5px 16px;
         }
 
         .sidebar-brand img {
             display: block;
-            width: 240px;
-            max-height: 194px;
+            width: 150px;
+            max-height: 100px;
             object-fit: contain;
         }
 
         .nav {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 2px;
         }
 
         .nav-link,
         .nav-heading {
             position: relative;
             display: flex;
-            min-height: 49px;
+            min-height: 41px;
             align-items: center;
-            gap: 14px;
-            padding: 0 13px;
+            gap: 11px;
+            padding: 0 8px;
             border: 0;
-            border-radius: 8px;
+            border-radius: 6px;
             background: transparent;
             color: #fff;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             text-align: left;
             text-decoration: none;
         }
 
+        .nav-icon {
+            display: block;
+            width: 18px;
+            height: 18px;
+            flex: 0 0 auto;
+            object-fit: contain;
+        }
+
+        .nav-heading .nav-icon {
+            transition: transform 220ms ease;
+        }
+
+        .nav-group[open] .nav-heading .nav-icon {
+            transform: scale(1.08);
+        }
+
         .nav-link.active {
-            background: rgb(255 255 255 / 15%);
+            background: transparent;
             font-weight: 650;
         }
 
@@ -111,15 +127,41 @@
             position: absolute;
             top: 10px;
             bottom: 10px;
-            left: -17px;
-            width: 4px;
-            border-radius: 0 4px 4px 0;
-            background: #A1CB35;
+            left: -12px;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
+            background: #fff;
             content: "";
         }
 
         .nav-group {
             border-radius: 8px;
+        }
+
+        .nav-group .subnav {
+            display: grid;
+            grid-template-rows: 0fr;
+            padding: 0 0 0 34px;
+            transition: grid-template-rows 260ms cubic-bezier(0.2, 0.75, 0.25, 1), padding 260ms ease;
+        }
+
+        .nav-group[open] .subnav {
+            grid-template-rows: 1fr;
+            padding-top: 2px;
+            padding-bottom: 6px;
+        }
+
+        .subnav-inner {
+            min-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-5px);
+            transition: opacity 180ms ease, transform 220ms ease;
+        }
+
+        .nav-group[open] .subnav-inner {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .nav-heading {
@@ -155,16 +197,27 @@
         }
 
         .subnav {
-            display: grid;
-            gap: 3px;
-            padding: 2px 0 6px 43px;
+            gap: 0;
         }
 
         .subnav-item {
+            display: block;
             padding: 8px 5px;
             color: rgb(255 255 255 / 68%);
             font-size: 13px;
             line-height: 1.4;
+            text-align: center;
+        }
+
+        a.subnav-item {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a.subnav-item:hover,
+        a.subnav-item:focus-visible {
+            color: #DDF2E5;
+            text-decoration: underline;
         }
 
         .subnav-item small {
@@ -185,22 +238,42 @@
         .logout-button {
             display: flex;
             width: 100%;
-            min-height: 46px;
+            min-height: 40px;
             align-items: center;
-            gap: 14px;
-            padding: 0 13px;
-            border: 1px solid rgb(255 255 255 / 24%);
-            border-radius: 8px;
+            gap: 10px;
+            padding: 0 8px;
+            border: 0;
+            border-radius: 0;
             background: transparent;
-            color: #fff;
-            font-size: 11px;
+            color: #F0442D;
+            font-size: 13px;
             cursor: pointer;
+            transition: color 160ms ease, transform 160ms ease;
+        }
+
+        .logout-button:hover,
+        .logout-button:focus-visible {
+            color: #FF6A52;
+        }
+
+        .logout-button:active {
+            transform: translateX(2px);
+        }
+
+        .logout-icon {
+            display: block;
+            width: 16px;
+            height: 16px;
+            flex: 0 0 auto;
+            background-color: currentColor;
+            -webkit-mask: url('{{ asset('icons/logout-icon.png') }}') center / contain no-repeat;
+            mask: url('{{ asset('icons/logout-icon.png') }}') center / contain no-repeat;
         }
 
         .main {
             min-width: 0;
             min-height: 100vh;
-            margin-left: 275px;
+            margin-left: 220px;
             padding: 27px;
         }
 
@@ -393,6 +466,11 @@
         .monthly-panel,
         .activity-panel {
             padding: 20px;
+        }
+
+        .monthly-panel {
+            padding-right: 31px;
+            padding-left: 31px;
         }
 
         .transactions-panel {
@@ -794,6 +872,7 @@
                 align-items: center;
                 padding-right: 10px;
                 padding-left: 10px;
+                padding-top: 28px;
             }
 
             .sidebar-brand {
@@ -872,7 +951,7 @@
 
         @media (max-width: 760px) {
             .sidebar {
-                width: min(285px, calc(100vw - 56px));
+                width: min(240px, calc(100vw - 56px));
                 transform: translateX(-105%);
             }
 
@@ -965,6 +1044,11 @@
             .panel {
                 min-height: 0;
                 padding: 20px;
+            }
+
+            .monthly-panel {
+                padding-right: 31px;
+                padding-left: 31px;
             }
 
             .transaction-menu-toggle {
@@ -1071,22 +1155,24 @@
                     <span>Dashboard</span>
                 </a>
 
-                <details class="nav-group">
+                <details class="nav-group" open>
                     <summary class="nav-heading">
                         <img class="nav-icon" src="{{ asset('icons/Keloladata-icon.png') }}" alt="">
                         <span>Kelola Data</span>
                         <span class="chevron" aria-hidden="true"></span>
                     </summary>
                     <div class="subnav">
-                        <span class="subnav-item">Ajukan Peminjaman<small>Route belum tersedia</small></span>
-                        <span class="subnav-item">Upload File Arsip<small>Route belum tersedia</small></span>
+                        <div class="subnav-inner">
+                            <a class="subnav-item" href="{{ route('admin.warga.index') }}">Data Warga</a>
+                            <a class="subnav-item" href="{{ route('admin.petugas.index') }}">Data Petugas</a>
+                        </div>
                     </div>
                 </details>
 
-                <span class="nav-link unavailable" aria-disabled="true">
+                <a class="nav-link {{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}" href="{{ route('admin.transaksi.index') }}" @if (request()->routeIs('admin.transaksi.*')) aria-current="page" @endif>
                     <img class="nav-icon" src="{{ asset('icons/Cart-icon.png') }}" alt="">
                     <span>Transaksi Sampah</span>
-                </span>
+                </a>
                 <span class="nav-link unavailable" aria-disabled="true">
                     <img class="nav-icon" src="{{ asset('icons/Profile-icon.png') }}" alt="">
                     <span>Profile</span>
@@ -1097,7 +1183,8 @@
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
                     <button class="logout-button" type="submit">
-                        <span>Keluar</span>
+                        <span class="logout-icon" aria-hidden="true"></span>
+                        <span>Log Out</span>
                     </button>
                 </form>
             </div>

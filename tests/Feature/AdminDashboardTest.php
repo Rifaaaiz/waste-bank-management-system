@@ -137,6 +137,38 @@ class AdminDashboardTest extends TestCase
         Role::create(['role_name' => 'Petugas']);
     }
 
+    public function test_sidebar_matches_reference_and_has_animated_data_menu_and_logout_icon(): void
+    {
+        $admin = $this->createUser('admin-sidebar', 'Admin');
+
+        $this->actingAs($admin)
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertSee('<details class="nav-group" open>', false)
+            ->assertSee('<a class="nav-link active" href="'.route('admin.dashboard').'" aria-current="page">', false)
+            ->assertSee('left: -12px;', false)
+            ->assertSee('width: 3px;', false)
+            ->assertSee('background: #fff;', false)
+            ->assertSee(route('admin.warga.index'))
+            ->assertSee('Data Warga')
+            ->assertSee('Data Petugas')
+            ->assertSee('<a class="subnav-item" href="'.route('admin.petugas.index').'">Data Petugas</a>', false)
+            ->assertSee('Transaksi Sampah')
+            ->assertSee(asset('icons/Cart-icon.png'))
+            ->assertSee('.nav-group[open] .nav-heading .nav-icon', false)
+            ->assertSee('transition: transform 220ms ease;', false)
+            ->assertSee('transform: scale(1.08);', false)
+            ->assertDontSee('scale(1.08) rotate(4deg)')
+            ->assertSee('padding-right: 31px;', false)
+            ->assertSee('padding-left: 31px;', false)
+            ->assertSee('text-align: center;', false)
+            ->assertSee('transition: grid-template-rows 260ms', false)
+            ->assertSee(asset('icons/logout-icon.png'))
+            ->assertSee('Log Out')
+            ->assertSee('.logout-button {', false)
+            ->assertSee('border: 0;', false);
+    }
+
     public function test_dashboard_uses_live_database_metrics_transactions_and_period_filter(): void
     {
         $admin = $this->createUser('admin-dashboard', 'Admin');

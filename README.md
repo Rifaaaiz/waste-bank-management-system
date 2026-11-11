@@ -1,59 +1,237 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ♻️ Waste Bank Management System
+
+<h3 align="center">🌱 KPP Bina Lindung - Zero Waste</h3>
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  Sistem Informasi Pengelolaan Bank Sampah Berbasis Web
 </p>
 
-## About Laravel
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-Framework-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+  <img src="https://img.shields.io/badge/PHP-Backend-777BB4?style=for-the-badge&logo=php&logoColor=white" />
+  <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-Styling-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌍 Tentang Project
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Waste Bank Management System** merupakan aplikasi berbasis web yang dikembangkan untuk membantu pengelolaan aktivitas bank sampah di lingkungan RW secara digital, terstruktur, dan terintegrasi.
 
-## Learning Laravel
+Aplikasi ini bertujuan mempermudah warga dalam melakukan pengajuan penjualan sampah serta membantu pengelola dalam mengelola data warga, transaksi, penimbangan, dan keuangan.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Setiap akun warga terhubung dengan identitas rumah tangga, sehingga seluruh aktivitas penjualan sampah dapat tercatat berdasarkan pemilik rumah, alamat, blok, nomor rumah, dan RT.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🎯 Tujuan Pengembangan
 
-## Laravel Sponsors
+- ♻️ Mendukung pengelolaan sampah berbasis digital.
+- 🏡 Mempermudah warga dalam melakukan penjualan sampah.
+- 📊 Meningkatkan transparansi pencatatan transaksi.
+- 💰 Mempermudah pengelolaan saldo dan keuangan warga.
+- 🔔 Memberikan informasi mengenai perkembangan pengajuan dan transaksi.
+- 🌱 Mendukung terciptanya lingkungan yang lebih bersih dan berkelanjutan.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## ✨ Fitur Utama
 
-### Premium Partners
+### 👤 User (Warga)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- 🏠 **Dashboard** — Menampilkan ringkasan saldo dan aktivitas bank sampah.
+- ♻️ **Jual Sampah** — Mengajukan penjualan sampah melalui formulir pengajuan.
+- 📋 **Riwayat** — Melihat riwayat pengajuan dan transaksi penjualan sampah.
+- 💰 **Keuangan** — Memantau saldo, pemasukan, dan riwayat pencairan.
+- 🔔 **Notifikasi** — Menerima informasi terkait status pengajuan dan transaksi.
+- 👤 **Profil** — Mengelola informasi akun dan identitas rumah tangga.
 
-## Contributing
+### 🛠️ Admin (Pengelola)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- 📊 **Dashboard** — Menampilkan ringkasan aktivitas bank sampah.
+- 🏡 **Data Warga** — Mengelola informasi dan akun warga.
+- 📥 **Pengajuan Sampah** — Memeriksa dan mengelola pengajuan penjualan sampah.
+- ⚖️ **Transaksi** — Mengelola hasil penimbangan dan perhitungan nilai sampah.
+- 💵 **Keuangan** — Memantau saldo dan mengelola pencairan warga.
+- 🔔 **Notifikasi** — Mengelola pemberitahuan kepada warga.
+- 📑 **Laporan** — Menampilkan rekapitulasi sampah dan transaksi.
+- ⚙️ **Pengaturan** — Mengelola jenis sampah dan harga per kilogram.
 
-## Code of Conduct
+> 🚧 Fitur aplikasi dikembangkan secara bertahap dan dapat mengalami penyesuaian selama proses pengembangan.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 💻 Teknologi yang Digunakan
 
-## Security Vulnerabilities
+| Teknologi | Kegunaan |
+|---|---|
+| 🐘 PHP | Bahasa pemrograman backend |
+| 🚀 Laravel | Framework aplikasi |
+| 🎨 Blade | Template engine |
+| 🌿 Tailwind CSS | Styling dan responsive layout |
+| 🗄️ MySQL | Database management |
+| ⚡ Vite | Asset bundling |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📂 Struktur Project
 
-## License
+```text
+waste-bank-management-system/
+│
+├── app/
+│   ├── Http/
+│   ├── Models/
+│   └── Providers/
+│
+├── bootstrap/
+├── config/
+├── database/
+│   ├── migrations/
+│   ├── factories/
+│   └── seeders/
+│
+├── public/
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+│
+├── routes/
+│   ├── web.php
+│   └── console.php
+│
+├── storage/
+├── tests/
+├── artisan
+├── composer.json
+└── package.json
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## ⚙️ Instalasi dan Konfigurasi
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/Rifaaaiz/waste-bank-management-system.git
+```
+
+### 2. Masuk ke Folder Project
+
+```bash
+cd waste-bank-management-system
+```
+
+### 3. Install Dependencies
+
+```bash
+composer install
+```
+
+### 4. Salin File Environment
+
+```bash
+cp .env.example .env
+```
+
+Untuk Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+### 5. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Konfigurasi Database
+
+Buka file `.env`, kemudian sesuaikan konfigurasi database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=waste_bank
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Pastikan database `waste_bank` sudah dibuat di MySQL.
+
+### 7. Jalankan Migration
+
+```bash
+php artisan migrate
+```
+
+### 8. Install Frontend Dependencies
+
+```bash
+npm install
+```
+
+### 9. Jalankan Aplikasi
+
+Buka dua terminal:
+
+Terminal pertama:
+
+```bash
+php artisan serve
+```
+
+Terminal kedua:
+
+```bash
+npm run dev
+```
+
+Akses aplikasi melalui:
+
+```text
+http://127.0.0.1:8000
+```
+
+## 🌱 Konsep Sistem
+
+Aplikasi ini menggunakan konsep satu rumah tangga dengan satu akun utama. Setiap transaksi penjualan sampah dikaitkan dengan identitas rumah tangga yang terdaftar.
+
+Alur transaksi:
+
+```text
+👤 Warga
+   │
+   ▼
+📝 Mengajukan Penjualan Sampah
+   │
+   ▼
+🛠️ Admin Memeriksa Pengajuan
+   │
+   ▼
+⚖️ Penimbangan Sampah
+   │
+   ▼
+💰 Perhitungan Nilai Sampah
+   │
+   ▼
+✅ Konfirmasi Transaksi
+   │
+   ▼
+🏦 Saldo Warga Bertambah
+```
+
+## 🚀 Development Status
+
+🟡 **Status: In Development**
+
+Project ini masih dalam tahap pengembangan dan penyempurnaan fitur.
+
+## 👨‍💻 Developer
+
+**Rifaaaiz**
+
+GitHub: [@Rifaaaiz](https://github.com/Rifaaaiz)
+
+---
+
+<p align="center">
+  ♻️ <b>Waste Less, Live More.</b> 🌱
+  <br/>
+  <i>Small Actions, Big Impact for a Greener Environment.</i>
+</p>

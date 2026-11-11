@@ -28,6 +28,7 @@ class User extends Authenticatable
         'family_card_number',
         'phone_number',
         'address',
+        'blok_rumah',
         'rt',
         'role_id',
         'profile_photo',
@@ -51,9 +52,9 @@ class User extends Authenticatable
         ];
     }
 
-    // Relasi ke tabel roles
     public function role(): BelongsTo
     {
+        // Relasi ke tabel roles
         return $this->belongsTo(
             Role::class,
             'role_id',
@@ -61,9 +62,9 @@ class User extends Authenticatable
         );
     }
 
-    // Relasi ke tabel accounts
     public function accounts(): HasMany
     {
+        // Relasi ke tabel accounts
         return $this->hasMany(
             Account::class,
             'user_id',
