@@ -76,6 +76,16 @@ class DataWargaTest extends TestCase
             ->assertSee('Search by invoice number, name, amount...')
             ->assertSee(route('admin.warga.create'))
             ->assertSee(route('admin.warga.pdf'))
+            ->assertSee('<div class="admin-nav-group is-open">', false)
+            ->assertSee('aria-expanded="true" aria-controls="admin-data-subnav"', false)
+            ->assertSee(asset('icons/Keloladata-icon.png'))
+            ->assertSee('.admin-nav-heading .admin-nav-icon', false)
+            ->assertSee('transition: transform 220ms ease;', false)
+            ->assertSee('transform: scale(1.08);', false)
+            ->assertSee('apakah anda yakin untuk log out?')
+            ->assertSee('data-logout-confirmation-open', false)
+            ->assertSee('data-logout-confirmation-cancel', false)
+            ->assertSee('event.target === dialog', false)
             ->assertSee('Warga 01')
             ->assertDontSee('Warga 11');
 
@@ -128,6 +138,7 @@ class DataWargaTest extends TestCase
         $this->get(route('admin.warga.edit', $warga->user_id))
             ->assertOk()
             ->assertSee('Edit Data Warga')
+            ->assertSee('<div class="admin-nav-group is-open">', false)
             ->assertSee('Jalan Melati');
 
         $this->put(route('admin.warga.update', $warga->user_id), [
@@ -167,6 +178,8 @@ class DataWargaTest extends TestCase
             ->assertSee('Masukan Alamat Jalan')
             ->assertSee('Masukan Blok Rumah')
             ->assertSee('Pilih RT')
+            ->assertSee('<div class="admin-nav-group is-open">', false)
+            ->assertSee('aria-expanded="true" aria-controls="admin-data-subnav"', false)
             ->assertSee(asset('icons/arrow-icon.png'))
             ->assertSee('rt-dropdown-menu')
             ->assertSee('rt-dropdown-menu.open')
@@ -175,7 +188,9 @@ class DataWargaTest extends TestCase
             ->assertSee('.back-link { display: grid')
             ->assertSee('class="secondary-button"', false)
             ->assertSeeInOrder(['class="secondary-button"', 'class="primary-button"'])
-            ->assertSee('class="admin-nav-group" open', false)
+            ->assertSee('<div class="admin-nav-group is-open">', false)
+            ->assertSee('transition: max-height 420ms ease-in-out', false)
+            ->assertSee('max-height: 120px;', false)
             ->assertSee('admin-subnav-item active', false)
             ->assertSee('width: 220px;')
             ->assertSee('margin-left: 220px;')

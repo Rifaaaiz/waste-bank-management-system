@@ -91,6 +91,27 @@
             text-decoration: none;
         }
 
+        .admin-nav-link,
+        .admin-nav-heading,
+        .admin-subnav-item,
+        .admin-logout {
+            transition: transform 180ms ease, color 180ms ease, background-color 180ms ease;
+        }
+
+        .admin-nav-link:hover,
+        .admin-nav-heading:hover,
+        .admin-subnav-item:hover,
+        .admin-logout:hover {
+            transform: translateX(2px);
+        }
+
+        .admin-nav-link:active,
+        .admin-nav-heading:active,
+        .admin-subnav-item:active,
+        .admin-logout:active {
+            transform: scale(0.98);
+        }
+
         .admin-nav-link.active {
             font-weight: 650;
         }
@@ -104,6 +125,19 @@
             border-radius: 0 3px 3px 0;
             background: #fff;
             content: "";
+            animation: admin-active-indicator 220ms ease both;
+        }
+
+        @keyframes admin-active-indicator {
+            from {
+                opacity: 0;
+                transform: scaleY(0.55);
+            }
+
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
         }
 
         .admin-nav-icon {
@@ -114,6 +148,19 @@
             object-fit: contain;
         }
 
+        .admin-nav-link .admin-nav-icon,
+        .admin-nav-heading .admin-nav-icon {
+            transition: transform 220ms ease;
+        }
+
+        .admin-nav-link:hover .admin-nav-icon,
+        .admin-nav-link:focus-visible .admin-nav-icon,
+        .admin-nav-heading:hover .admin-nav-icon,
+        .admin-nav-heading:focus-visible .admin-nav-icon,
+        .admin-nav-group.is-open .admin-nav-heading .admin-nav-icon {
+            transform: scale(1.08);
+        }
+
         .admin-nav-group {
             border-radius: 8px;
         }
@@ -121,59 +168,44 @@
         .admin-nav-heading {
             width: 100%;
             cursor: pointer;
-            list-style: none;
-        }
-
-        .admin-nav-heading::-webkit-details-marker {
-            display: none;
+            font: inherit;
         }
 
         .admin-chevron {
+            display: block;
             width: 18px;
             height: 18px;
             margin-left: auto;
-            transition: transform 160ms ease;
-        }
-
-        .admin-chevron::after {
-            display: block;
-            width: 7px;
-            height: 7px;
-            margin: 2px auto 0;
-            border-right: 1.5px solid currentColor;
-            border-bottom: 1.5px solid currentColor;
-            content: "";
-            transform: rotate(45deg);
-        }
-
-        .admin-nav-group[open] .admin-chevron {
+            transition: transform 320ms ease-in-out;
+            filter: brightness(0) invert(1);
+            object-fit: contain;
             transform: rotate(180deg);
         }
 
-        .admin-subnav {
-            display: grid;
-            grid-template-rows: 0fr;
-            padding: 0 0 0 34px;
-            transition: grid-template-rows 260ms cubic-bezier(0.2, 0.75, 0.25, 1), padding 260ms ease;
+        .admin-nav-group.is-open .admin-chevron {
+            transform: rotate(270deg);
         }
 
-        .admin-nav-group[open] .admin-subnav {
-            grid-template-rows: 1fr;
+        .admin-subnav {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 0 0 34px;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: max-height 420ms ease-in-out, padding 320ms ease-in-out, opacity 320ms ease-in-out, transform 320ms ease-in-out;
+        }
+
+        .admin-nav-group.is-open .admin-subnav {
+            max-height: 120px;
             padding-top: 2px;
             padding-bottom: 6px;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .admin-subnav-inner {
             min-height: 0;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(-5px);
-            transition: opacity 180ms ease, transform 220ms ease;
-        }
-
-        .admin-nav-group[open] .admin-subnav-inner {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .admin-subnav-item {
@@ -363,6 +395,7 @@
             }
         }
     </style>
+    @include('admin.partials.logout-confirmation-styles')
     @yield('styles')
 </head>
 <body>
@@ -373,25 +406,29 @@
             <img src="{{ asset('images/LogoE-Sabililah.png') }}" alt="Logo KPP Bina Lindung Zero Waste">
         </a>
 
+        @php
+            $isKelolaDataOpen = request()->routeIs('admin.warga.*', 'admin.petugas.*');
+        @endphp
+
         <nav class="admin-nav" aria-label="Navigasi admin">
-            <a class="admin-nav-link" href="{{ route('admin.dashboard') }}">
+            <a class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif>
                 <img class="admin-nav-icon" src="{{ asset('icons/dashboard-icon.png') }}" alt="">
                 <span>Dashboard</span>
             </a>
 
-            <details class="admin-nav-group" open>
-                <summary class="admin-nav-heading">
+            <div class="admin-nav-group{{ $isKelolaDataOpen ? ' is-open' : '' }}">
+                <button class="admin-nav-heading" type="button" aria-expanded="{{ $isKelolaDataOpen ? 'true' : 'false' }}" aria-controls="admin-data-subnav">
                     <img class="admin-nav-icon" src="{{ asset('icons/Keloladata-icon.png') }}" alt="">
                     <span>Kelola Data</span>
-                    <span class="admin-chevron" aria-hidden="true"></span>
-                </summary>
-                <div class="admin-subnav">
+                    <img class="admin-chevron" src="{{ asset('icons/arrow-icon.png') }}" alt="" aria-hidden="true">
+                </button>
+                <div class="admin-subnav" id="admin-data-subnav" aria-hidden="{{ $isKelolaDataOpen ? 'false' : 'true' }}" @unless ($isKelolaDataOpen) inert @endunless>
                     <div class="admin-subnav-inner">
                         <a class="admin-subnav-item {{ request()->routeIs('admin.warga.*') ? 'active' : '' }}" href="{{ route('admin.warga.index') }}" @if (request()->routeIs('admin.warga.*')) aria-current="page" @endif>Data Warga</a>
                         <a class="admin-subnav-item {{ request()->routeIs('admin.petugas.*') ? 'active' : '' }}" href="{{ route('admin.petugas.index') }}" @if (request()->routeIs('admin.petugas.*')) aria-current="page" @endif>Data Petugas</a>
                     </div>
                 </div>
-            </details>
+            </div>
 
             <a class="admin-nav-link {{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}" href="{{ route('admin.transaksi.index') }}" @if (request()->routeIs('admin.transaksi.*')) aria-current="page" @endif>
                 <img class="admin-nav-icon" src="{{ asset('icons/Cart-icon.png') }}" alt="">
@@ -404,13 +441,10 @@
         </nav>
 
         <div class="admin-sidebar-bottom">
-            <form method="POST" action="{{ route('admin.logout') }}">
-                @csrf
-                <button class="admin-logout" type="submit">
-                    <span class="admin-logout-icon" aria-hidden="true"></span>
-                    <span>Log Out</span>
-                </button>
-            </form>
+            @include('admin.partials.logout-confirmation', [
+                'logoutButtonClass' => 'admin-logout',
+                'logoutIconClass' => 'admin-logout-icon',
+            ])
         </div>
     </aside>
 
@@ -427,6 +461,21 @@
         const sidebar = document.getElementById('admin-sidebar');
         const menuToggle = document.querySelector('.admin-menu-toggle');
         const backdrop = document.querySelector('.admin-backdrop');
+        const dataMenuToggle = sidebar.querySelector('.admin-nav-heading');
+        const dataSubnav = document.getElementById('admin-data-subnav');
+
+        dataMenuToggle.addEventListener('click', () => {
+            const isOpen = dataMenuToggle.getAttribute('aria-expanded') === 'true';
+            const willOpen = !isOpen;
+            dataMenuToggle.setAttribute('aria-expanded', String(willOpen));
+            dataSubnav.setAttribute('aria-hidden', String(!willOpen));
+            if (willOpen) {
+                dataSubnav.removeAttribute('inert');
+            } else {
+                dataSubnav.setAttribute('inert', '');
+            }
+            dataMenuToggle.closest('.admin-nav-group').classList.toggle('is-open', willOpen);
+        });
 
         if (menuToggle && backdrop) {
             function setSidebarOpen(isOpen) {

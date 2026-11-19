@@ -74,6 +74,8 @@ class DataPetugasTest extends TestCase
             ->assertSee('Search by invoice number, name, amount...')
             ->assertSee(route('admin.petugas.create'))
             ->assertSee(route('admin.petugas.pdf'))
+            ->assertSee('<div class="admin-nav-group is-open">', false)
+            ->assertSee('aria-expanded="true" aria-controls="admin-data-subnav"', false)
             ->assertSee('Nama Petugas 01')
             ->assertDontSee('Nama Petugas 11')
             ->assertDontSee('Warga Bukan Petugas');
@@ -109,6 +111,10 @@ class DataPetugasTest extends TestCase
             ->get(route('admin.petugas.create'))
             ->assertOk()
             ->assertSee('Tambah Data Petugas')
+            ->assertSee('<select id="position" name="position" required>', false)
+            ->assertSee('<option value="Petugas Bank Sampah" selected>Petugas Bank Sampah</option>', false)
+            ->assertDontSee('<option value="Pengangkut">', false)
+            ->assertSee('<div class="admin-nav-group is-open">', false)
             ->assertSee('admin-subnav-item active', false)
             ->assertSee('Data Warga</a>', false)
             ->assertDontSee('class="admin-subnav-item active" href="'.route('admin.warga.index').'"', false);
@@ -117,7 +123,7 @@ class DataPetugasTest extends TestCase
             'full_name' => 'Petugas Baru',
             'username' => 'petugas-baru',
             'phone_number' => '08123456789',
-            'position' => 'Pengangkut',
+            'position' => 'Petugas Bank Sampah',
             'password' => 'Password-aman-123',
             'password_confirmation' => 'Password-aman-123',
             'role_id' => Role::where('role_name', 'Admin')->value('role_id'),
@@ -125,11 +131,13 @@ class DataPetugasTest extends TestCase
 
         $petugas = User::where('username', 'petugas-baru')->firstOrFail();
         $this->assertSame('Petugas', $petugas->role->role_name);
+        $this->assertSame('Petugas Bank Sampah', $petugas->position);
         $this->assertTrue(Hash::check('Password-aman-123', $petugas->password_hash));
 
         $this->get(route('admin.petugas.edit', $petugas->user_id))
             ->assertOk()
             ->assertSee('Edit Data Petugas')
+            ->assertSee('<div class="admin-nav-group is-open">', false)
             ->assertSee('Petugas Baru');
 
         $this->put(route('admin.petugas.update', $petugas->user_id), [
@@ -149,6 +157,26 @@ class DataPetugasTest extends TestCase
         $this->delete(route('admin.petugas.destroy', $petugas->user_id))
             ->assertRedirect(route('admin.petugas.index'));
         $this->assertDatabaseMissing('users', ['user_id' => $petugas->user_id]);
+    }
+
+    public function test_create_petugas_rejects_jabatan_outside_the_single_available_option(): void
+    {
+        $admin = $this->createUser('admin-invalid-position', 'Admin');
+
+        $this->actingAs($admin)
+            ->from(route('admin.petugas.create'))
+            ->post(route('admin.petugas.store'), [
+                'full_name' => 'Petugas Tidak Valid',
+                'username' => 'petugas-invalid',
+                'phone_number' => '08123456789',
+                'position' => 'Koordinator',
+                'password' => 'Password-aman-123',
+                'password_confirmation' => 'Password-aman-123',
+            ])
+            ->assertRedirect(route('admin.petugas.create'))
+            ->assertSessionHasErrors('position');
+
+        $this->assertDatabaseMissing('users', ['username' => 'petugas-invalid']);
     }
 
     public function test_non_petugas_accounts_cannot_be_edited_or_deleted_through_petugas_routes(): void

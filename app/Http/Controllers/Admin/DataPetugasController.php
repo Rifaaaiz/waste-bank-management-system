@@ -55,7 +55,7 @@ class DataPetugasController extends Controller
             'full_name' => ['required', 'string', 'max:100'],
             'username' => ['required', 'string', 'max:50', 'unique:users,username'],
             'phone_number' => ['required', 'string', 'max:20', 'regex:/^\+?[0-9][0-9\s()-]{7,19}$/'],
-            'position' => ['required', 'string', 'max:100'],
+            'position' => ['required', 'string', 'max:100', Rule::in(['Petugas Bank Sampah'])],
             'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
         ]);
 

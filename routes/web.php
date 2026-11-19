@@ -8,8 +8,12 @@ use App\Http\Controllers\Admin\DataPetugasController;
 use App\Http\Controllers\Admin\DataWargaController;
 use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Admin\TransaksiSampahController;
+use App\Http\Controllers\User\FinanceController;
+use App\Http\Controllers\User\HistoryController;
 use App\Http\Controllers\User\LoginController;
+use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\PasswordResetController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 
@@ -126,6 +130,39 @@ Route::get('/login', [LoginController::class, 'create'])
 Route::post('/login', [LoginController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('login.store');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/beranda', [LoginController::class, 'dashboard'])
+        ->name('user.dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])
+        ->name('user.profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])
+        ->name('user.profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])
+        ->name('user.profile.update');
+    Route::get('/pengaturan-akun', [ProfileController::class, 'settings'])
+        ->name('user.settings');
+    Route::get('/bantuan', [ProfileController::class, 'help'])
+        ->name('user.help');
+    Route::get('/riwayat', [HistoryController::class, 'index'])
+        ->name('user.riwayat');
+    Route::get('/keuangan', [FinanceController::class, 'index'])
+        ->name('user.keuangan');
+    Route::get('/keuangan/pencairan', [FinanceController::class, 'createWithdrawal'])
+        ->name('user.keuangan.withdrawals.create');
+    Route::post('/keuangan/pencairan', [FinanceController::class, 'storeWithdrawal'])
+        ->name('user.keuangan.withdrawals.store');
+    Route::get('/notifikasi', [NotificationController::class, 'index'])
+        ->name('user.notifications.index');
+    Route::post('/notifikasi/baca-semua', [NotificationController::class, 'markAllRead'])
+        ->name('user.notifications.read-all');
+    Route::get('/notifikasi/{notification}', [NotificationController::class, 'show'])
+        ->whereNumber('notification')
+        ->name('user.notifications.show');
+
+    Route::post('/logout', [LoginController::class, 'destroy'])
+        ->name('logout');
+});
 
 Route::get('/register', [RegisterController::class, 'create'])
     ->name('register');

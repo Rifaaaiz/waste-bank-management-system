@@ -40,7 +40,7 @@
         .petugas-table tr:last-child td { border-bottom: 0; }
         .petugas-table td:last-child { border-right: 0; }
         .row-actions { display: flex; align-items: center; gap: 6px; }
-        .row-action { display: inline-flex; min-height: 25px; align-items: center; justify-content: center; gap: 4px; padding: 0 7px; border: 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; cursor: pointer; }
+        .row-action { display: inline-flex; width: 55px; height: 24px; min-height: 24px; align-items: center; justify-content: center; gap: 4px; padding: 0; border: 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; cursor: pointer; }
         .row-action.edit { background: #07805b; }
         .row-action.delete { background: #e33218; }
         .row-action svg { width: 12px; height: 12px; }

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class RegisterController extends Controller
@@ -35,7 +37,7 @@ class RegisterController extends Controller
         abort_if($memberRoleId === null, 503, 'Pendaftaran belum tersedia karena role Warga belum dikonfigurasi.');
 
         DB::transaction(function () use ($validated, $memberRoleId): void {
-            User::create([
+            $user = User::create([
                 'username' => $validated['username'],
                 'phone_number' => $validated['phone_number'],
                 'password_hash' => Hash::make($validated['password']),
@@ -43,6 +45,13 @@ class RegisterController extends Controller
                 'rt' => $validated['rt'],
                 'role_id' => $memberRoleId,
             ]);
+
+            if (Schema::hasTable('accounts') && ! Account::query()->where('user_id', $user->user_id)->exists()) {
+                Account::query()->create([
+                    'user_id' => $user->user_id,
+                    'balance' => 0,
+                ]);
+            }
         });
 
         return redirect()

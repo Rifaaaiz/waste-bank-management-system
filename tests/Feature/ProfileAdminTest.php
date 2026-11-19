@@ -77,6 +77,8 @@ class ProfileAdminTest extends TestCase
         $this->actingAs($this->admin)
             ->get(route('admin.profile.show'))
             ->assertOk()
+            ->assertSee('<div class="admin-nav-group">', false)
+            ->assertSee('aria-expanded="false" aria-controls="admin-data-subnav"', false)
             ->assertSee('Admin Profile')
             ->assertSee('Administrator')
             ->assertSee('08123456789')

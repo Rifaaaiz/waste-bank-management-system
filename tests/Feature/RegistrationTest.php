@@ -88,7 +88,7 @@ class RegistrationTest extends TestCase
         $this->post(route('login.store'), [
             'username' => 'new-warga',
             'password' => 'Secure-password-123',
-        ])->assertRedirect(route('login'))
+        ])->assertRedirect(route('user.dashboard'))
             ->assertSessionHas('status');
 
         $this->assertTrue(Auth::check());

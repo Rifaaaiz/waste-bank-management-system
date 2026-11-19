@@ -150,6 +150,8 @@ class TransaksiSampahTest extends TestCase
             ->assertOk()
             ->assertSee('Tambah Transaksi Sampah')
             ->assertSee('warga-transaksi')
+            ->assertSee('<div class="admin-nav-group">', false)
+            ->assertSee('aria-expanded="false" aria-controls="admin-data-subnav"', false)
             ->assertSee('#'.$pendingPickup)
             ->assertSee('data-preview="date"', false)
             ->assertSee('id="transaction-date" type="date"', false)

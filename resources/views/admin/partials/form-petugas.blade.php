@@ -5,8 +5,10 @@
     .petugas-form-field { display: grid; min-width: 0; align-content: start; gap: 7px; }
     .petugas-form-field-wide { grid-column: 1 / -1; }
     .petugas-form-field label { color: #30453a; font-size: 13px; font-weight: 600; }
-    .petugas-form-field input { width: 100%; min-height: 46px; padding: 0 12px; border: 1px solid #d5e0da; border-radius: 7px; outline: none; background: #fff; color: #25352c; }
-    .petugas-form-field input:focus { border-color: #2F8961; box-shadow: 0 0 0 3px rgb(47 137 97 / 12%); }
+    .petugas-form-field input,
+    .petugas-form-field select { width: 100%; min-height: 46px; padding: 0 12px; border: 1px solid #d5e0da; border-radius: 7px; outline: none; background: #fff; color: #25352c; }
+    .petugas-form-field input:focus,
+    .petugas-form-field select:focus { border-color: #2F8961; box-shadow: 0 0 0 3px rgb(47 137 97 / 12%); }
     .petugas-form-field input::placeholder { color: #9aa79f; }
     .petugas-form-error { color: #bd3527; font-size: 12px; }
     .petugas-form-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
@@ -40,7 +42,13 @@
         </div>
         <div class="petugas-form-field petugas-form-field-wide">
             <label for="position">Jabatan</label>
-            <input id="position" name="position" type="text" value="{{ old('position', $editing ? $petugas->position : '') }}" placeholder="Masukan Jabatan" maxlength="100" required>
+            @if ($editing)
+                <input id="position" name="position" type="text" value="{{ old('position', $petugas->position) }}" placeholder="Masukan Jabatan" maxlength="100" required>
+            @else
+                <select id="position" name="position" required>
+                    <option value="Petugas Bank Sampah" selected>Petugas Bank Sampah</option>
+                </select>
+            @endif
             @error('position') <span class="petugas-form-error">{{ $message }}</span> @enderror
         </div>
         <div class="petugas-form-field">

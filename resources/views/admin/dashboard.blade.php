@@ -102,6 +102,27 @@
             text-decoration: none;
         }
 
+        .nav-link,
+        .nav-heading,
+        .subnav-item,
+        .logout-button {
+            transition: transform 180ms ease, color 180ms ease, background-color 180ms ease;
+        }
+
+        .nav-link:hover,
+        .nav-heading:hover,
+        .subnav-item:hover,
+        .logout-button:hover {
+            transform: translateX(2px);
+        }
+
+        .nav-link:active,
+        .nav-heading:active,
+        .subnav-item:active,
+        .logout-button:active {
+            transform: scale(0.98);
+        }
+
         .nav-icon {
             display: block;
             width: 18px;
@@ -110,11 +131,16 @@
             object-fit: contain;
         }
 
+        .nav-link .nav-icon,
         .nav-heading .nav-icon {
             transition: transform 220ms ease;
         }
 
-        .nav-group[open] .nav-heading .nav-icon {
+        .nav-link:hover .nav-icon,
+        .nav-link:focus-visible .nav-icon,
+        .nav-heading:hover .nav-icon,
+        .nav-heading:focus-visible .nav-icon,
+        .nav-group.is-open .nav-heading .nav-icon {
             transform: scale(1.08);
         }
 
@@ -132,6 +158,19 @@
             border-radius: 0 3px 3px 0;
             background: #fff;
             content: "";
+            animation: dashboard-active-indicator 220ms ease both;
+        }
+
+        @keyframes dashboard-active-indicator {
+            from {
+                opacity: 0;
+                transform: scaleY(0.55);
+            }
+
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
         }
 
         .nav-group {
@@ -139,61 +178,46 @@
         }
 
         .nav-group .subnav {
-            display: grid;
-            grid-template-rows: 0fr;
+            max-height: 0;
+            overflow: hidden;
             padding: 0 0 0 34px;
-            transition: grid-template-rows 260ms cubic-bezier(0.2, 0.75, 0.25, 1), padding 260ms ease;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: max-height 420ms ease-in-out, padding 320ms ease-in-out, opacity 320ms ease-in-out, transform 320ms ease-in-out;
         }
 
-        .nav-group[open] .subnav {
-            grid-template-rows: 1fr;
+        .nav-group.is-open .subnav {
+            max-height: 120px;
             padding-top: 2px;
             padding-bottom: 6px;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .subnav-inner {
             min-height: 0;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(-5px);
-            transition: opacity 180ms ease, transform 220ms ease;
-        }
-
-        .nav-group[open] .subnav-inner {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .nav-heading {
             width: 100%;
             cursor: pointer;
-            list-style: none;
-        }
-
-        .nav-heading::-webkit-details-marker {
-            display: none;
+            font: inherit;
         }
 
         .nav-heading .chevron {
+            display: block;
             width: 18px;
             height: 18px;
             margin-left: auto;
-            transition: transform 160ms ease;
-        }
-
-        .nav-heading .chevron::after {
-            display: block;
-            width: 7px;
-            height: 7px;
-            margin: 2px auto 0;
-            border-right: 1.5px solid currentColor;
-            border-bottom: 1.5px solid currentColor;
-            content: "";
-            transform: rotate(45deg);
-        }
-
-        .nav-group[open] .chevron {
+            transition: transform 320ms ease-in-out;
+            filter: brightness(0) invert(1);
+            object-fit: contain;
             transform: rotate(180deg);
+        }
+
+        .nav-group.is-open .chevron {
+            transform: rotate(270deg);
         }
 
         .subnav {
@@ -1139,8 +1163,13 @@
             }
         }
     </style>
+    @include('admin.partials.logout-confirmation-styles')
 </head>
 <body>
+    @php
+        $isKelolaDataOpen = request()->routeIs('admin.warga.*', 'admin.petugas.*');
+    @endphp
+
     <div class="dashboard">
         <button class="sidebar-backdrop" type="button" aria-label="Tutup menu"></button>
 
@@ -1155,38 +1184,35 @@
                     <span>Dashboard</span>
                 </a>
 
-                <details class="nav-group" open>
-                    <summary class="nav-heading">
+                <div class="nav-group{{ $isKelolaDataOpen ? ' is-open' : '' }}">
+                    <button class="nav-heading" type="button" aria-expanded="{{ $isKelolaDataOpen ? 'true' : 'false' }}" aria-controls="dashboard-data-subnav">
                         <img class="nav-icon" src="{{ asset('icons/Keloladata-icon.png') }}" alt="">
                         <span>Kelola Data</span>
-                        <span class="chevron" aria-hidden="true"></span>
-                    </summary>
-                    <div class="subnav">
+                        <img class="chevron" src="{{ asset('icons/arrow-icon.png') }}" alt="" aria-hidden="true">
+                    </button>
+                    <div class="subnav" id="dashboard-data-subnav" aria-hidden="{{ $isKelolaDataOpen ? 'false' : 'true' }}" @unless ($isKelolaDataOpen) inert @endunless>
                         <div class="subnav-inner">
                             <a class="subnav-item" href="{{ route('admin.warga.index') }}">Data Warga</a>
                             <a class="subnav-item" href="{{ route('admin.petugas.index') }}">Data Petugas</a>
                         </div>
                     </div>
-                </details>
+                </div>
 
                 <a class="nav-link {{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}" href="{{ route('admin.transaksi.index') }}" @if (request()->routeIs('admin.transaksi.*')) aria-current="page" @endif>
                     <img class="nav-icon" src="{{ asset('icons/Cart-icon.png') }}" alt="">
                     <span>Transaksi Sampah</span>
                 </a>
-                <span class="nav-link unavailable" aria-disabled="true">
+                <a class="nav-link{{ request()->routeIs('admin.profile.*') ? ' active' : '' }}" href="{{ route('admin.profile.show') }}" @if (request()->routeIs('admin.profile.*')) aria-current="page" @endif>
                     <img class="nav-icon" src="{{ asset('icons/Profile-icon.png') }}" alt="">
                     <span>Profile</span>
-                </span>
+                </a>
             </nav>
 
             <div class="sidebar-bottom">
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button class="logout-button" type="submit">
-                        <span class="logout-icon" aria-hidden="true"></span>
-                        <span>Log Out</span>
-                    </button>
-                </form>
+                @include('admin.partials.logout-confirmation', [
+                    'logoutButtonClass' => 'logout-button',
+                    'logoutIconClass' => 'logout-icon',
+                ])
             </div>
         </aside>
 
@@ -1399,6 +1425,21 @@
         const sidebar = document.getElementById('admin-sidebar');
         const menuToggle = document.querySelector('.menu-toggle');
         const backdrop = document.querySelector('.sidebar-backdrop');
+        const dataMenuToggle = sidebar.querySelector('.nav-heading');
+        const dataSubnav = document.getElementById('dashboard-data-subnav');
+
+        dataMenuToggle.addEventListener('click', () => {
+            const isOpen = dataMenuToggle.getAttribute('aria-expanded') === 'true';
+            const willOpen = !isOpen;
+            dataMenuToggle.setAttribute('aria-expanded', String(willOpen));
+            dataSubnav.setAttribute('aria-hidden', String(!willOpen));
+            if (willOpen) {
+                dataSubnav.removeAttribute('inert');
+            } else {
+                dataSubnav.setAttribute('inert', '');
+            }
+            dataMenuToggle.closest('.nav-group').classList.toggle('is-open', willOpen);
+        });
 
         function setSidebarOpen(isOpen) {
             sidebar.classList.toggle('open', isOpen);
